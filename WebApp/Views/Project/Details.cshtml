@@ -1,0 +1,53 @@
+﻿@model WebApp.Models.Edit.ProjectEditViewModel
+
+@{
+    ViewBag.Title = "Details";
+    var myProject = Model.Project.OwnerEmail == User.Identity.Name;
+    var str = " | ";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Project</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Project.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Project.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Project.OwnerEmail)
+        </dt>
+
+        <dd>
+            @Html.ActionLink(Model.Project.OwnerEmail, "Details", "Person", new { id = Model.Project.OwnerId }, null)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Project.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Project.Description)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("View This project's issues", "Issues", "Issue", new { sortOrder = 'x', projectName = Model.Project.Name }, null)
+    @if(myProject||ViewBag.CurrentPerson.IsAdmin)
+    {
+        @str
+        @Html.ActionLink("Edit Project", "Edit", new { id = Model.Project.Id })
+        @str
+        @Html.ActionLink("Delete", "Delete", new { id = Model.Project.Id },
+                    new { onclick = "return confirm('Are you sure you wish to delete this project? All the issues corresponding to it will also be deleted.');" })
+    }
+    @str
+    @Html.ActionLink("Back to Project List", "Projects")
+</p>

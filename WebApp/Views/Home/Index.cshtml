@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div>
+    <h1>
+        Welcome
+    </h1>
+    <h2>
+        What would you like to display?
+    </h2>
+    <h4>
+        @Html.ActionLink("Issues", "Issues", "Issue", new { },null)
+    </h4>
+    <h4>
+        @Html.ActionLink("Projects", "Projects", "Project", new { }, null)
+    </h4>
+    <h4>
+        @Html.ActionLink("Users", "People", "Person", new { }, null)
+    </h4>
+</div>

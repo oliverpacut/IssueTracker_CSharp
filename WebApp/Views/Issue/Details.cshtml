@@ -1,0 +1,170 @@
+﻿@model WebApp.Models.Edit.IssueEditViewModel
+
+@{
+    ViewBag.Title = "Details";
+    string dateSolved;
+    if (Model.Issue.DateSolved == null)
+    {
+        dateSolved = "NOT SOLVED";
+    } else
+    {
+        dateSolved = Model.Issue.DateSolved.ToString();
+    }
+    var str = " | ";
+
+    string responsiblePerson;
+    if (Model.Issue.ResponsiblePersonEmail == null)
+    {
+        responsiblePerson = "NONE";
+    }
+    else
+    {
+        responsiblePerson = Model.Issue.ResponsiblePersonEmail; // "@Html.ActionLink(Model.Issue.ResponsiblePerson, \"Details\", \"Person\", new { userName = Model.Issue.ResponsiblePerson }, null)";
+    }
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Issue</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Issue.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Issue.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Issue.OwnerEmail)
+        </dt>
+
+        <dd>
+            @Html.ActionLink(Model.Issue.OwnerEmail, "Details", "Person", new { id = Model.Issue.OwnerId }, null)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Issue.Description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Issue.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Issue.State)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Issue.State)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Issue.Type)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Issue.Type)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Issue.ResponsiblePersonEmail)
+        </dt>
+        <dd>
+            @if(responsiblePerson == "NONE")
+            {
+                @responsiblePerson
+            }
+            else
+            {
+                @Html.ActionLink(responsiblePerson, "Details", "Person", new { id = Model.Issue.ResponsiblePersonId }, null)
+            }
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Issue.DateFiled)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Issue.DateFiled)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Issue.DateSolved)
+        </dt>
+        <dd>
+            @dateSolved
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Issue.ProjectName)
+        </dt>
+        <dd>
+            @Html.ActionLink(Model.Issue.ProjectName, "Details", "Project", new { id = Model.Issue.ProjectId }, null)
+        </dd>
+
+    </dl>
+</div>
+
+    <p>
+        @if ((ViewBag.CurrentPerson.Id == Model.Issue.OwnerId)||ViewBag.CurrentPerson.IsAdmin)
+        {
+            if (ViewBag.CurrentPerson.IsAdmin)
+            {
+                @Html.ActionLink("Take over issue", "IssueTakeOver", new { adminName = ViewBag.CurrentPerson.Email, adminId = ViewBag.CurrentPerson.Id, issueId = Model.Issue.Id })
+                @str
+                @Html.ActionLink("Edit", "Edit", new { id = Model.Issue.Id })
+            }
+            @str
+            @Html.ActionLink("Delete", "Delete", new { id = Model.Issue.Id },
+                    new { onclick = "return confirm('Are you sure you wish to delete this issue?');" })
+            @str
+        }
+        @Html.ActionLink("Back to Issue List", "Issues")
+    </p>
+
+
+<p>
+    @Html.ActionLink("Create New Comment", "AddComment", new { issueId = Model.Issue.Id })
+</p>
+
+<div>
+    <table class="table">
+        <tr>
+            <th>
+                Author
+            </th>
+            <th>
+                Body
+            </th>
+            <th>
+                Added
+            </th>
+        </tr>
+@foreach (var item in Model.Comments)
+{
+    var myItem = item.OwnerId == ViewBag.CurrentPerson.Id;
+    <tr>
+        <td>
+            @Html.ActionLink(item.OwnerName, "Details", "Person", new { id = item.OwnerId }, null)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.Body)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.CreationTime)
+        </td>
+
+        <td>
+            @if (myItem|| ViewBag.CurrentPerson.IsAdmin)
+            {
+                @Html.ActionLink("Delete", "DeleteComment", new { item.Id },
+                                     new { onclick = "return confirm('Are you sure you wish to delete this comment?');" })
+            }
+        </td>
+    </tr>
+}
+    </table>
+</div>

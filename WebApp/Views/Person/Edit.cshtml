@@ -1,0 +1,43 @@
+﻿@model WebApp.Models.Edit.PersonEditViewModel
+
+@{
+    ViewBag.Title = "Edit";
+    //Model.Person.Name = Model.Name;
+   // Model.Person.Email = Model.Email;
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>PersonEditViewModel</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Person.Id)
+        @Html.HiddenFor(model => model.Person.Email)
+        @Html.HiddenFor(model => model.Person.Name)
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Person.IsAdmin, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.CheckBoxFor(model => model.Person.IsAdmin)
+                        @Html.ValidationMessageFor(model => model.Person.IsAdmin, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to User List", "People")
+</div>

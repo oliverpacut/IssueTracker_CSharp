@@ -1,0 +1,79 @@
+﻿@model WebApp.Models.Edit.PersonEditViewModel
+
+@{
+    ViewBag.Title = "Details";
+    string Role = Model.Person.IsAdmin ? "Admin" : "Customer";
+    var str = " | ";
+}
+
+<h2>Account</h2>
+
+<div>
+    <h4>PersonEditViewModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Person.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Person.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Person.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Person.Email)
+        </dd>
+
+        <dt>
+            Role
+        </dt>
+
+        <dd>
+            @Role
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("View my projects", "Projects", "Project", new { userName = Model.Person.Email }, null)
+    <!--if (ViewBag.CurrentPerson.IsAdmin)
+    {
+        str
+        Html.ActionLink("Edit", "Edit", new { id = Model.Person.Id })
+        str
+        Html.ActionLink("Delete", "Delete", new { id = Model.Person.Id },
+                new { onclick = "return confirm('Are you sure you wish to delete this user?');" })
+    }
+    -->
+    @str
+    @Html.ActionLink("Back to List", "People")
+</p>
+
+<div>
+    <table class="table">
+        <tr>
+            <th>
+                Notifications
+            </th>
+            <th>
+                Received
+            </th>
+        </tr>
+        @foreach (var item in Model.Notifications)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Body)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreationTime)
+                </td>
+            </tr>
+        }
+    </table>
+</div>

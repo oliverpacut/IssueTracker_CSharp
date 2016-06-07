@@ -1,0 +1,56 @@
+﻿@model WebApp.Models.ListView.PersonViewModel
+
+@{
+    ViewBag.Title = "People";
+}
+
+<h2>People</h2>
+
+<!--
+<p>
+    Html.ActionLink("Create New", "Create")
+</p>
+-->
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("Name", "People")
+        </th>
+        <th>
+            @Html.ActionLink("Email", "People", new { sortOrder = 'e' })
+        </th>
+        <th>
+            @Html.ActionLink("Role", "People", new { sortOrder = 't' })
+        </th>
+    </tr>
+
+@foreach (var item in Model.People) {
+    string Role = item.IsAdmin ? "Admin" : "Customer";
+    var myItem = item.Email == User.Identity.Name;
+    var str = " | ";
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Role
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Details", new { id = item.Id })
+            @if(ViewBag.CurrentPerson.IsAdmin)
+            {
+                @str
+                @Html.ActionLink("Edit", "Edit", new {  id=item.Id })
+                @str
+                @Html.ActionLink("Delete", "Delete", new { id=item.Id },
+                    new { onclick = "return confirm('Are you sure you wish to delete this user?');" })
+            }
+        </td>
+    </tr>
+}
+
+</table>
